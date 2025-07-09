@@ -1,0 +1,122 @@
+<!-- Brian Taylor 2025 -->
+<html>
+<head>
+<title>Music Bingo</title>
+<script>
+
+var roundName = '';
+
+function generateBingoCard(items, rows = 5, cols = 5) {
+  if (items.length < rows * cols) {
+    throw new Error("Not enough items for the card size.");
+  }
+ 
+	items = [...items].sort(() => Math.random() - 0.5);
+	
+  const card = [];
+  for (let i = 0; i < rows; i++) {
+    const row = [];
+    for (let j = 0; j < cols; j++) {
+      row.push(items[i * cols + j]);
+    }
+    card.push(row);
+  }
+  const centerRow = Math.floor(rows / 2);
+  const centerCol = Math.floor(cols / 2);
+    card[centerRow][centerCol] = "Free Space";
+  return card;
+}
+
+function displayBingoCard(roundName = "") {
+
+	const card = generateBingoCard(bingoItems,5,5);
+    const container = document.getElementById("bingo-card");
+
+    const table = document.createElement('table');
+
+    card.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+            const td = document.createElement('td');
+	    const p = document.createElement('p');
+            
+			
+			if(cell.length > 50){
+				p.textContent = cell.substring(0, 50).trimEnd() + "...";
+			} else {
+				p.textContent = cell;
+			}
+			
+			
+		td.appendChild(p);
+            tr.appendChild(td);
+        });
+        table.appendChild(tr);
+    });
+
+	table.innerHTML = "<tr><td colspan=5>" + roundName + "</td></tr>" + table.innerHTML + "";
+    container.appendChild(table);
+}
+
+	var  bingoItemsList;
+
+	var  bingoItems;
+
+function genBingoCards(){
+
+	document.getElementById("bingo-card").innerHTML = "";
+
+	bingoItemsList = document.getElementById('textList').value;
+
+	bingoItems = bingoItemsList.split("\n");
+	
+	var cardnum = document.getElementById('numcards').value;
+	
+	roundName = document.getElementById('roundTitle').value
+	
+	
+	document.getElementById('countList').innerHTML = bingoItems.length + ' songs';
+
+	for (let i = 0; i < cardnum; i++) {
+		displayBingoCard(roundName);
+	}
+
+}
+
+</script>
+
+<style>
+	
+	#bingo-card td {width: 123px; height: 83px; padding: 0 5px 0 5px;}
+	#bingo-card td p {display: block; font-size: 1em;}
+	#bingo-card table {table-layout: fixed; margin-top: 0;  margin-bottom: 0; margin-left: 30px; border-collapse: collapse; break-inside: avoid; background-size: 30%; background-image: url("logo.png");background-color: rgba(255,255,255,0.92);background-blend-mode: lighten;}
+	#bingo-card table:nth-child(2n) {margin-top: 60px;  margin-bottom: 0;}
+	#bingo-card table tr:nth-child(4) td:nth-child(3) {background-color: #666; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000;  -webkit-text-stroke: 0;}
+	#bingo-card tr, td {word-break: break-word; font-family: sans-serif; border: 1px solid #000; text-align: center; border-collapse: collapse; text-shadow: 0px 0px 5px #fff; paint-order: stroke fill; -webkit-text-stroke: 4px #fff;  }
+	#bingo-card table tr:nth-child(1) td, #bingo-card table tr:nth-child(7) td  {height: 23px; background-color: #666; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; font-style: italic; -webkit-text-stroke: 0;}
+
+
+	@media print {
+	   .noPrint {display:none;}
+	}
+
+</style>
+</head>
+<body>
+
+<div class="noPrint">
+<form>
+<label for="numcards">Number of Cards:</label>
+<input type="text" id="numcards" name="numcards" value=50><br/>
+<label for="numcards">Round Title:</label>
+<input type="text" id="roundTitle" name="roundTitle"><br/>
+<textarea id="textList" name="textList" rows="15" cols="55" wrap="off"></textarea><br/>
+<button type="submit" form="form1" value="Generate Cards" onclick="genBingoCards();">Generate Cards</button>
+<label id="countList"></label>
+</form>
+</div>
+
+<div id="bingo-card"></div>
+
+</body>
+</html>
