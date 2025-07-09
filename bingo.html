@@ -4,13 +4,13 @@
 <title>Bingo Card Generator 2000</title>
 <script>
 
-var roundName = '';
+var roundName = "";
 var bingoItemsList;
 var bingoItems;
 
 function generateBingoCard(items, rows = 5, cols = 5) {
 	if (items.length < rows * cols) {
-		throw new Error("Not enough items for the card size.");
+		document.getElementById('countList').innerHTML = "Minimum of " + (rows * cols) + " items needed.";
 	}
 
 	items = [...items].sort(() => Math.random() - 0.5);
@@ -75,8 +75,8 @@ function genBingoCards(){
 	
 	roundName = document.getElementById('roundTitle').value
 	
-	//Display Number of Songs in the List
-	document.getElementById('countList').innerHTML = bingoItems.length + ' songs';
+	//Display Number of Items in the List
+	document.getElementById('countList').innerHTML = bingoItems.length + " items found";
 
 
 	for (let i = 0; i < cardnum; i++) {
@@ -108,6 +108,7 @@ function genBingoCards(){
 <body>
 
 <div class="noPrint">
+	<h1>Bingo Card Generator 2000</h1>
 	<form>
 		<label for="numcards">Number of Cards:</label>
 		<input type="text" id="numcards" name="numcards" value=50><br/>
