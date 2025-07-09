@@ -1,30 +1,36 @@
 <!-- Brian Taylor 2025 -->
 <html>
 <head>
-<title>Music Bingo</title>
+<title>Bingo Card Generator 2000</title>
 <script>
 
 var roundName = '';
+var bingoItemsList;
+var bingoItems;
 
 function generateBingoCard(items, rows = 5, cols = 5) {
-  if (items.length < rows * cols) {
-    throw new Error("Not enough items for the card size.");
-  }
- 
+	if (items.length < rows * cols) {
+		throw new Error("Not enough items for the card size.");
+	}
+
 	items = [...items].sort(() => Math.random() - 0.5);
+
+	const card = [];
 	
-  const card = [];
-  for (let i = 0; i < rows; i++) {
-    const row = [];
-    for (let j = 0; j < cols; j++) {
-      row.push(items[i * cols + j]);
-    }
-    card.push(row);
-  }
-  const centerRow = Math.floor(rows / 2);
-  const centerCol = Math.floor(cols / 2);
-    card[centerRow][centerCol] = "Free Space";
-  return card;
+	for (let i = 0; i < rows; i++) {
+		const row = [];
+		for (let j = 0; j < cols; j++) {
+			row.push(items[i * cols + j]);
+		}
+		card.push(row);
+	}
+	
+	const centerRow = Math.floor(rows / 2);
+	const centerCol = Math.floor(cols / 2);
+	
+	card[centerRow][centerCol] = "Free Space";
+	
+	return card;
 }
 
 function displayBingoCard(roundName = "") {
@@ -38,18 +44,16 @@ function displayBingoCard(roundName = "") {
         const tr = document.createElement('tr');
         row.forEach(cell => {
             const td = document.createElement('td');
-	    const p = document.createElement('p');
+			const p = document.createElement('p');
             
-			
 			if(cell.length > 50){
 				p.textContent = cell.substring(0, 50).trimEnd() + "...";
 			} else {
 				p.textContent = cell;
 			}
-			
-			
-		td.appendChild(p);
-            tr.appendChild(td);
+				
+			td.appendChild(p);
+			tr.appendChild(td);
         });
         table.appendChild(tr);
     });
@@ -58,9 +62,6 @@ function displayBingoCard(roundName = "") {
     container.appendChild(table);
 }
 
-	var  bingoItemsList;
-
-	var  bingoItems;
 
 function genBingoCards(){
 
@@ -74,8 +75,9 @@ function genBingoCards(){
 	
 	roundName = document.getElementById('roundTitle').value
 	
-	
+	//Display Number of Songs in the List
 	document.getElementById('countList').innerHTML = bingoItems.length + ' songs';
+
 
 	for (let i = 0; i < cardnum; i++) {
 		displayBingoCard(roundName);
@@ -101,19 +103,20 @@ function genBingoCards(){
 	}
 
 </style>
+
 </head>
 <body>
 
 <div class="noPrint">
-<form>
-<label for="numcards">Number of Cards:</label>
-<input type="text" id="numcards" name="numcards" value=50><br/>
-<label for="numcards">Round Title:</label>
-<input type="text" id="roundTitle" name="roundTitle"><br/>
-<textarea id="textList" name="textList" rows="15" cols="55" wrap="off"></textarea><br/>
-<button type="submit" form="form1" value="Generate Cards" onclick="genBingoCards();">Generate Cards</button>
-<label id="countList"></label>
-</form>
+	<form>
+		<label for="numcards">Number of Cards:</label>
+		<input type="text" id="numcards" name="numcards" value=50><br/>
+		<label for="numcards">Round Title:</label>
+		<input type="text" id="roundTitle" name="roundTitle"><br/>
+		<textarea id="textList" name="textList" rows="15" cols="55" wrap="off"></textarea><br/>
+		<button type="submit" form="form1" value="Generate Cards" onclick="genBingoCards();">Generate Cards</button>
+		<label id="countList"></label>
+	</form>
 </div>
 
 <div id="bingo-card"></div>
