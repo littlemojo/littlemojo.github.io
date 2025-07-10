@@ -8,6 +8,17 @@ var roundName = "";
 var bingoItemsList;
 var bingoItems;
 
+var InputFile;
+var fileContent;
+var messageDisplay;
+
+window.onload = function() {
+	InputFile = document.getElementById("inputfile");
+	fileContent = document.getElementById("textList");
+	messageDisplay = document.getElementById("fileerror");
+	InputFile.addEventListener("change", handleFile);
+}
+
 function generateBingoCard(items, rows = 5, cols = 5) {
 
 	if (items.length < rows * cols) {
@@ -65,13 +76,21 @@ function displayBingoCard(roundName = "") {
 }
 
 
+function loadItemsList(){
+
+	bingoItemsList = document.getElementById('textList').value;
+	bingoItems = bingoItemsList.split("\n");
+	
+	//Display Number of Items in the List
+	document.getElementById('countList').innerHTML = bingoItems.length + " items found";
+
+}
+
 function genBingoCards(){
 
 	document.getElementById("bingo-card").innerHTML = "";
 
-	bingoItemsList = document.getElementById('textList').value;
-
-	bingoItems = bingoItemsList.split("\n");
+	loadItemsList();
 	
 	var cardnum = document.getElementById('numcards').value;
 	
@@ -84,14 +103,49 @@ function genBingoCards(){
 	
 	roundName = document.getElementById('roundTitle').value
 	
-	//Display Number of Items in the List
-	document.getElementById('countList').innerHTML = bingoItems.length + " items found";
-
 
 	for (let i = 0; i < cardnum; i++) {
 		displayBingoCard(roundName);
 	}
 
+}
+
+
+
+function handleFile(event) {
+	const file = event.target.files[0];
+	
+	//Clear content
+	fileContent.textContent = ""; 
+	messageDisplay.textContent = "";
+
+	//Validate file
+	if (!file) {
+		showMessage("No file selected. Please choose a file.", "error");
+		return;
+	}
+
+	if (!file.type.startsWith("text")) {
+		showMessage("Unsupported file type. Please select a text file.", "error");
+		return;
+	}
+
+	// Read the file
+	const reader = new FileReader();
+	reader.onload = () => {
+	fileContent.textContent = reader.result;
+	loadItemsList();
+	};
+	reader.onerror = () => {
+	showMessage("Error reading the file. Please try again.", "error");
+	};
+	reader.readAsText(file);
+}
+
+// Displays a message to the user
+function showMessage(message, type) {
+	messageDisplay.textContent = message;
+	messageDisplay.style.color = type === "error" ? "red" : "green";
 }
 
 </script>
@@ -100,6 +154,7 @@ function genBingoCards(){
 	
 
 	h1 {color: #fff; font-family: sans-serif; font-style: italic;font-variant: small-caps; border-bottom: 1px solid black; text-shadow: -3px -3px 6px #008ab7, 3px 3px 6px #00ad72;}
+	label {font-family: sans-serif;}
 	#bingo-card td {width: 123px; height: 83px; padding: 0 5px 0 5px;}
 	#bingo-card td p {display: block; font-size: 1em;}
 	#bingo-card table {table-layout: fixed; margin-top: 0;  margin-bottom: 0; margin-left: 30px; border-collapse: collapse; break-inside: avoid; background-size: 30%; background-image: url("logo.png");background-color: rgba(255,255,255,0.92);background-blend-mode: lighten;}
@@ -121,13 +176,23 @@ function genBingoCards(){
 	<h1>Bingo Card Generator 2000</h1>
 	<form>
 		<label for="numcards">Number of Cards:</label>
-		<input type="number" id="numcards" name="numcards" value="50" min="1" max="200" required><br/>
+		<input type="number" id="numcards" name="numcards" value="50" min="1" max="200" required><br/><br/>
+		
 		<label for="numcards">Round Title:</label>
-		<input type="text" id="roundTitle" name="roundTitle"><br/>
-		<textarea id="textList" name="textList" rows="15" cols="55" wrap="off"></textarea><br/>
-		<button type="button" form="form1" value="Generate Cards" onclick="genBingoCards();">Generate Cards</button>
+		<input type="text" id="roundTitle" name="roundTitle" size=44><br/><br/>
+		
+		<label for="file-input">Item List:</label>
+		<input type="file" id="inputfile" />
+		<div id="fileerror"></div>
+		<textarea id="textList" name="textList" rows="15" cols="55" wrap="off"></textarea>
+		<br/>
 		<label id="countList"></label>
+		<br/><br/>
+		
+		<button type="button" form="form1" value="Generate Cards" onclick="genBingoCards();">Generate Cards</button>
+		
 	</form>
 
-</div><div id="bingo-card"></div></body>
+</div><div id="bingo-card"></div>
+</body>
 </html>
