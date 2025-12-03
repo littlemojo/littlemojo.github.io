@@ -209,30 +209,33 @@ function genBingoCards(){
 	label {font-family: sans-serif;}
 	#bingo-card td {width: 123px; height: 90px; padding: 0 5px 0 5px;}
 
-	#bingo-card table {width: 680px; table-layout: fixed; margin: 0 auto; border-collapse: collapse; break-inside: avoid; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);}
+	#bingo-card table {width: 680px; table-layout: fixed; margin: 0 auto; border-collapse: collapse; break-inside: avoid; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);}
 	#bingo-card table.bg {background-color: #fff;}
 	
 	/* Spacing for every other card */
 	#bingo-card table:nth-child(2n) {margin-top: 60px;  margin-bottom: 0;}
 		
 	/* All Squares */
-	#bingo-card tr, td {word-break: break-word; font-family: sans-serif; border: 1px solid #000; text-align: center; border-collapse: collapse; text-shadow: 0px 0px 5px #fff; paint-order: stroke fill; -webkit-text-stroke: 4px #fff;  }
+	#bingo-card tr, td {word-break: break-word; font-family: sans-serif; border: 1px solid #000; text-align: center; border-collapse: collapse;}
 
-	#bingo-card tr td:hover{background-color: yellow; cursor: pointer;}
+	#bingo-card tr td:hover{cursor: pointer; background-color: #6df;}
+
 	
 	
 	.highlighted {
-background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);
+		background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);
 	}
 	
 	
 
 	/* Center Square */
-	#bingo-card td.CenterSquare {background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);}
+	#bingo-card td.CenterSquare {
+		background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);
+	}
 
 
 	/* Title */
-	#bingo-card table tr:nth-child(1) td {height: 23px; background-color: #07b; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; font-style: italic; -webkit-text-stroke: 0;}
+	#bingo-card table tr:nth-child(1) td {height: 28px; background-color: #07b; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; font-style: italic; -webkit-text-stroke: 0;  box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);}
 	
 	.buttons {padding: 5px 15px 5px 15px; box-shadow: 2px 2px 5px 0  rgba(0,0,0,0.5);}
 
