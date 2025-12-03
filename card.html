@@ -1,0 +1,260 @@
+<!-- Brian Taylor 2025 -->
+<html>
+<head>
+<title>Bingo Card Generator 2000</title>
+<script type="application/javascript">
+
+var roundName = "";
+var bingoItemsList;
+var bingoItems;
+
+var InputFile;
+var fileContent;
+var bgimage;
+var freespace;
+
+
+window.onload = function() {
+	InputFile = document.getElementById("inputfile");
+	fileContent = document.getElementById("textList");
+	bgimage = document.getElementById("bgimage");
+	freespace = document.getElementById("freespace");
+}
+
+
+const parsedUrl = new URL(window.location.href);
+var roundNum = Number(parsedUrl.searchParams.get("round"))-1;
+
+
+
+function seededRandom(seed) {
+  let a = seed;
+  return function() {
+    a = (a * 9301 + 49297) % 233280;
+    return a / 233280;
+  };
+}
+
+function seededShuffle(array, seed) {
+  const random = seededRandom(seed);
+  const shuffledArray = [...array]; // Create a copy to avoid modifying the original
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+
+  return shuffledArray;
+}
+
+
+
+function getSessionId() {
+    let sessionId = sessionStorage.getItem('uniqueSessionId');
+
+    if (!sessionId) {
+        // Generate a new unique ID if one doesn't exist
+        sessionId = Math.random()
+        sessionStorage.setItem('uniqueSessionId', sessionId);
+    }
+
+    return sessionId;
+}
+
+
+const currentSessionId = getSessionId();
+console.log("Current Session ID:", currentSessionId);
+mySeed = currentSessionId;
+
+
+
+
+
+function genBingoCard(items, rows = 5, cols = 5) {
+
+	if (items.length < rows * cols) {
+		document.getElementById('countList').innerHTML = "Minimum of " + (rows * cols) + " items required.";
+		throw new Error("Minimum of " + (rows * cols) + " items required.");
+	}
+
+	// items = [...items].sort(() => Math.random() - 0.5);
+	
+	items = seededShuffle(items, mySeed);
+
+	const card = [];
+	
+	for (let i = 0; i < rows; i++) {
+		const row = [];
+		for (let j = 0; j < cols; j++) {
+			row.push(items[i * cols + j]);
+		}
+		card.push(row);
+	}
+	
+	
+	const centerRow = Math.floor(rows / 2);
+	const centerCol = Math.floor(cols / 2);
+	
+	// Show Free Space if checked
+	//if(freespace.checked){
+		card[centerRow][centerCol] = "Free Space";
+	//}
+
+	return card;
+}
+
+
+function displayBingoCard(roundName = "") {
+
+	const card = genBingoCard(bingoItems,5,5);
+    const cardContainer = document.getElementById("bingo-card");
+
+    const table = document.createElement('table');
+	table.id="myTable";
+	
+	
+	//if(bgimage.checked){
+		table.className="bg";
+	//}
+
+    card.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+            const td = document.createElement('td');
+			const p = document.createElement('p');
+            
+			// Trim Title
+			if(cell.length > 50){
+				td.textContent = cell.substring(0, 50).trimEnd() + "...";
+			} else {
+				td.textContent = cell;
+			}
+
+			// Add CSS class for Free Space
+			if(cell == 'Free Space'){
+				td.className="CenterSquare";
+			}
+
+			//td.appendChild(p);
+			
+			tr.appendChild(td);
+        });
+        table.appendChild(tr);
+    });
+
+	table.innerHTML = "<tr><td colspan=5>" + roundName + "</td></tr>" + table.innerHTML + "";
+    cardContainer.appendChild(table);
+}
+
+
+function loadItemsList(){
+
+	bingoItemsLists = [
+						["Round 1 - By the Numbers",["9 to 5","A Thousand Miles","24 Hour Party People","Song 2","19th Nervous Breakdown","Route 66","A Million Dreams","Seven Nation Army","I'm Eighteen","If I Had $1,000,000","I Would Die 4 U","It's Five O'Clock Somewhere","1234","Two Tickets to Paradise","22","Knock Three Times","2 Legit 2 Quit","Edge of Seventeen","1-2-3","I'm Gonna Be (500 Miles)","Baby One More Time","46 Days","24K Magic","Eight Days A Week","3AM","5 Years Time","If 6 Was 9","1979","One","50 Ways to Leave Your Lover","7 Chinese Bros.","Rainy Day Women #12 & 35","Thirteen","20th Century Boy","Seven Wonders","Two","1999","Three Little Birds","M79","Mambo No. 5","2112: Overture","When I'm Sixty Four","You're Sixteen","25 or 6 to 4","867-5309","Ten Years Gone","Gimme Three Steps","I Can't Drive 55","99 Luftballons","Ain't 2 Proud 2 Beg","Nothing Compares 2 U","One More Time","Love Potion No. 9","One Bourbon, One Scotch, One Beer","6 Underground","100 Years","Love Me Two Times","1000 Oceans","1901","2000 Miles"]],
+						["Round 2 - Movie Song Hits",["Don't Worry Be Happy","Dance The Night","Let's Hear It for the Boy","Unwritten","Gloria","Hungry Eyes","See You Again","Maniac","Can't Take My Eyes off You","Men In Black","Glory of Love","Endless Love","You Make My Dreams","I Just Called To Say I Love You","Lose Yourself","Car Wash","Don't You","Kiss from a Rose","The Power Of Love","A Hard Day's Night","Blaze Of Glory","Stand By Me","She's Like the Wind","Oh, Pretty Woman","Accidentally In Love","You're the Inspiration","Danger Zone","Bang Bang","No Easy Way Out","Johnny B. Goode","Hard to Say I'm Sorry","Shallow","Happy","You Never Can Tell","Bohemian Rhapsody","Raindrops Keep Fallin' On My Head","Hallelujah","Tubthumping","Vacation","Gonna Fly Now","Gangsta's Paradise","Where Is My Mind?","That Thing You Do!","CAN'T STOP THE FEELING!","It Must Have Been Love","St. Elmos Fire","You're the Best","Stuck In The Middle With You","A View to a Kill","Check On It","Everything I Do I Do It For You","Exhale","You'll Be In My Heart","Shake Ya Tailfeather","Change the World","Shakedown","Magic","Mrs. Robinson","We Don't Need Another Hero","You Sexy Thing"]],
+						["Round 3 - Daves I Know",["Daves I Know","So Much to Say","Let's Dance","Comfortably Numb","Best of You","Take Five","Sail Away","Once in a Lifetime","Panama","Hell or Highwater","I Still Haven't Found What I'm Looking For","Teach Your Children","Daydream Believer","Sweet Dreams","Here I Go Again","You Really Got Me","Soul Man","Guns and Ships","Enjoy the Silence","Because","Looking for Freedom","Been Caught Stealing","We Just Disagree","Symphony Of Destruction","Smells Like Teen Spirit","Just Like Paradise","Heroes","Hold On, I'm Comin'","And She Was","Wish You Were Here","Learn to Fly","Longhaired Redneck","Kathy's Waltz","My Friends","Hot for Teacher","Woodstock","Stuck In A Moment You Can't Get Out Of","Glad All Over","Willie, Waylon and Me","Here Comes the Rain Again","Aeroplane","Mountain Song","Ride The Lightning","Babylon","Ain't Talkin' 'Bout Love","Is This Love","Punk Rock Girl","South Of Heaven","Alive","Where Is My Mind?","Is There Anybody Out There?","Down with the Sickness","Sick of You","Pinky's Dream","The Grip Tightens","The Trooper","Just Can't Get Enough","Lola","The Time of My Life","Ants Marching"]],
+						["Round 4 - Say What - Misunderstood Lyrics",["Paranoid","I Want You","Blinded By The Light","Mr. Brightside","Ride Wit Me","Lady Marmalade","Butterfly","We Didn't Start the Fire","Cotton Eye Joe","Get Low","It's The End Of The World As We Know It","Song 2","Louie Louie","Hash Pipe","Rehab","Bennie And The Jets","Smells Like Teen Spirit","99 Red Balloons","Work","Crazy Train","Return of the Mack","Intergalactic","1979","One Week","Rock the Casbah","Fergalicious","Bohemian Rhapsody","Jet Airliner","Everything In Its Right Place","MMMBop","Me Against the Music","All Night Long","Champagne Supernova","Yellow Ledbetter","September","L.A. Woman","Long Cool Woman","Auld Lang Syne","Sweet Caroline","Born in the U.S.A.","Baba O'Riley","Victoria","Bang a Gong","House Of The Rising Sun","Brown Sugar","Bizarre Love Triangle","Loser","Bitter Sweet Symphony","Tom's Diner","Midnight City","Send Me on My Way","Come On Eileen","Kiss from a Rose","Photograph","Pumped Up Kicks","The Sweet Escape","The Safety Dance","Ray of Light","Sir Duke","Sugar We're Goin Down"]]
+					]
+
+	roundName = bingoItemsLists[roundNum][0]
+	bingoItems = bingoItemsLists[roundNum][1]
+
+}
+
+
+function genBingoCards(){
+
+	document.getElementById("bingo-card").innerHTML = "";
+
+	loadItemsList();
+	
+	//var numCards = document.getElementById('numcards').value;
+	var numCards = 1
+		
+	if (numCards < 1) {
+		//document.getElementById('countList').innerHTML = "Minimum of 1 card required.";
+		throw new Error("Minimum of 1 card required.");
+	}
+	
+	
+	for (let i = 0; i < numCards; i++) {
+		displayBingoCard(roundName);
+	}
+	
+	
+	
+	//Onclick Event to Highlight
+	const table = document.querySelector('table');
+
+	table.addEventListener('click', function(event) {
+	  // Check if the clicked element is a table cell (td)
+	  if (event.target.tagName === 'TD') {
+		// Toggle the 'highlighted' class on the clicked cell
+		event.target.classList.toggle('highlighted');
+	  }
+	});
+
+
+}
+
+
+
+</script>
+
+<style type="text/css">
+
+	body {padding: 20px; background-size: 30%; background-image: url("logo.png"); background-color: rgba(225,245,255,1); background-blend-mode: soft-light;}
+	h1 {color: #fff; font-family: sans-serif; font-style: italic;font-variant: small-caps; text-shadow: -3px -3px 6px #008ab7, 3px 3px 6px #00ad72; margin-top: 0;}
+	label {font-family: sans-serif;}
+	#bingo-card td {width: 123px; height: 90px; padding: 0 5px 0 5px;}
+
+	#bingo-card table {width: 680px; table-layout: fixed; margin: 0 auto; border-collapse: collapse; break-inside: avoid; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);}
+	#bingo-card table.bg {background-color: #fff;}
+	
+	/* Spacing for every other card */
+	#bingo-card table:nth-child(2n) {margin-top: 60px;  margin-bottom: 0;}
+		
+	/* All Squares */
+	#bingo-card tr, td {word-break: break-word; font-family: sans-serif; border: 1px solid #000; text-align: center; border-collapse: collapse; text-shadow: 0px 0px 5px #fff; paint-order: stroke fill; -webkit-text-stroke: 4px #fff;  }
+
+	#bingo-card tr td:hover{background-color: yellow; cursor: pointer;}
+	
+	
+	.highlighted {
+background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);
+	}
+	
+	
+
+	/* Center Square */
+	#bingo-card td.CenterSquare {background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.5);}
+
+
+	/* Title */
+	#bingo-card table tr:nth-child(1) td {height: 23px; background-color: #07b; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; font-style: italic; -webkit-text-stroke: 0;}
+	
+	.buttons {padding: 5px 15px 5px 15px; box-shadow: 2px 2px 5px 0  rgba(0,0,0,0.5);}
+
+
+	.mainbox {
+			border: 1px solid #62a392;
+			width: 460px;
+			padding: 15px;
+			margin-bottom: 20px;
+			background-color: #d0e3de;
+			border-radius: 20px;
+			box-shadow: 4px 4px 8px 0  rgba(0,0,0,0.3);
+	}
+
+	@media print {
+	   .noPrint {display:none;}
+	   body {margin: 0; padding: 0;}
+	}
+
+</style>
+
+</head>
+<body onload="genBingoCards();">
+<div id="bingo-card"></div>
+</body>
+</html>
