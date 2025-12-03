@@ -24,7 +24,7 @@ window.onload = function() {
 
 
 const parsedUrl = new URL(window.location.href);
-var roundNum = Number(parsedUrl.searchParams.get("round"))-1;
+var roundNum = Number(parsedUrl.searchParams.get("round"));
 
 
 
@@ -63,7 +63,7 @@ function getSessionId() {
 }
 
 
-const currentSessionId = getSessionId();
+const currentSessionId = parseInt((roundNum*0.9) * Number(getSessionId()) * 100000000);
 console.log("Current Session ID:", currentSessionId);
 mySeed = currentSessionId;
 
@@ -157,8 +157,8 @@ function loadItemsList(){
 						["Round 4 - Say What - Misunderstood Lyrics",["Paranoid","I Want You","Blinded By The Light","Mr. Brightside","Ride Wit Me","Lady Marmalade","Butterfly","We Didn't Start the Fire","Cotton Eye Joe","Get Low","It's The End Of The World As We Know It","Song 2","Louie Louie","Hash Pipe","Rehab","Bennie And The Jets","Smells Like Teen Spirit","99 Red Balloons","Work","Crazy Train","Return of the Mack","Intergalactic","1979","One Week","Rock the Casbah","Fergalicious","Bohemian Rhapsody","Jet Airliner","Everything In Its Right Place","MMMBop","Me Against the Music","All Night Long","Champagne Supernova","Yellow Ledbetter","September","L.A. Woman","Long Cool Woman","Auld Lang Syne","Sweet Caroline","Born in the U.S.A.","Baba O'Riley","Victoria","Bang a Gong","House Of The Rising Sun","Brown Sugar","Bizarre Love Triangle","Loser","Bitter Sweet Symphony","Tom's Diner","Midnight City","Send Me on My Way","Come On Eileen","Kiss from a Rose","Photograph","Pumped Up Kicks","The Sweet Escape","The Safety Dance","Ray of Light","Sir Duke","Sugar We're Goin Down"]]
 					]
 
-	roundName = bingoItemsLists[roundNum][0]
-	bingoItems = bingoItemsLists[roundNum][1]
+	roundName = bingoItemsLists[roundNum-1][0]
+	bingoItems = bingoItemsLists[roundNum-1][1]
 
 }
 
@@ -211,22 +211,20 @@ function genBingoCards(){
 
 	#bingo-card table {width: 680px; table-layout: fixed; margin: 0 auto; border-collapse: collapse; break-inside: avoid;}
 	#bingo-card table.bg {background-color: #fff;}
-	
+
 	/* Spacing for every other card */
 	#bingo-card table:nth-child(2n) {margin-top: 60px;  margin-bottom: 0;}
-		
+
 	/* All Squares */
 	#bingo-card tr, td {word-break: break-word; font-family: sans-serif; border: 1px solid #000; text-align: center; border-collapse: collapse;}
 
 	#bingo-card tr td:hover{cursor: pointer; background-color: #6df;}
 
-	
-	
+
 	.highlighted {
 		background-color: #0af; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; -webkit-text-stroke: 0; box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);
 	}
-	
-	
+
 
 	/* Center Square */
 	#bingo-card td.CenterSquare {
@@ -236,7 +234,7 @@ function genBingoCards(){
 
 	/* Title */
 	#bingo-card table tr:nth-child(1) td {height: 28px; background-color: #07b; color: #fff; font-weight: bold; text-shadow: 0px 0px 6px #000; font-style: italic; -webkit-text-stroke: 0;  box-shadow: 4px 4px 9px 0  rgba(0,0,0,0.4);}
-	
+
 	.buttons {padding: 5px 15px 5px 15px; box-shadow: 2px 2px 5px 0  rgba(0,0,0,0.5);}
 
 
